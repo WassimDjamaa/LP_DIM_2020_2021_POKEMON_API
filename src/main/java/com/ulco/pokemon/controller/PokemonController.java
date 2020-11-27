@@ -16,7 +16,6 @@ import static com.ulco.pokemon.enums.PokemonTypeEnum.*;
 @RequestMapping("/pokemons")
 public class PokemonController {
 
-
     private List<PokemonDTO> pokemonList;
 
 
@@ -26,6 +25,7 @@ public class PokemonController {
         pokemonList.add(new PokemonDTO(1, "salamèche", 3.5, 3.5, FEU));
         pokemonList.add(new PokemonDTO(2, "carapus", 3.5, 3.5, EAU));
         pokemonList.add(new PokemonDTO(3, "dany", 3.5, 3.5, PLANTE));
+        pokemonList.add(new PokemonDTO(4, "herbivore", 3.5, 3.5, PLANTE));
     }
 
     @GetMapping
@@ -43,7 +43,7 @@ public class PokemonController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> generatePokemon(@RequestBody PokemonDTO user){
+    public ResponseEntity<Void> generatePokemon(@RequestBody PokemonDTO user) {
         pokemonList.add(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -51,6 +51,22 @@ public class PokemonController {
                 .buildAndExpand(user.getId()).toUri();
 
         return ResponseEntity.created(location).build();
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateAPokemon(@PathVariable Integer id){
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllPokemon() {
+        pokemonList.clear();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAPokemon(@PathVariable Integer id) {
+        pokemonList.removeIf(pokemon -> pokemon.getId().equals(id));
+        return ResponseEntity.noContent().build();
     }
 }
