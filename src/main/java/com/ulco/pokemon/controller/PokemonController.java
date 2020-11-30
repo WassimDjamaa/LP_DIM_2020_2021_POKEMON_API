@@ -62,10 +62,10 @@ public class PokemonController {
                     .findFirst()
                     .orElseThrow(NotFoundException::new);
 
-        pokemonList.stream()
-                .filter(user -> user.getId().equals(id))
-                .findFirst()
-                .orElseThrow(AlreadyExistException::new);
+            pokemonList.stream()
+                    .filter(user -> user.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(AlreadyExistException::new);
 
 
             pokemonToUpdate.setId(updatePokemon.getId());
