@@ -1,7 +1,9 @@
 package com.ulco.pokemon.controller;
 
 import com.ulco.pokemon.dto.PokemonDTO;
+import com.ulco.pokemon.exception.AlreadyExistException;
 import com.ulco.pokemon.exception.NotFoundException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -54,7 +56,23 @@ public class PokemonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAPokemon(@PathVariable Integer id){
+    public ResponseEntity<Void> updateAPokemon(@PathVariable Integer id, @RequestBody PokemonDTO updatePokemon) {
+            PokemonDTO pokemonToUpdate = pokemonList.stream()
+                    .filter(pokemon -> pokemon.getId().equals(id))
+                    .findFirst()
+                    .orElseThrow(NotFoundException::new);
+
+        pokemonList.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElseThrow(AlreadyExistException::new);
+
+
+            pokemonToUpdate.setId(updatePokemon.getId());
+            pokemonToUpdate.setName(updatePokemon.getName());
+            pokemonToUpdate.setTaille(updatePokemon.getTaille());
+            pokemonToUpdate.setPoids(updatePokemon.getPoids());
+            pokemonToUpdate.setType(updatePokemon.getType());
         return ResponseEntity.noContent().build();
     }
 

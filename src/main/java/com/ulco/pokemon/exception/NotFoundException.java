@@ -9,7 +9,4 @@ public class NotFoundException extends RuntimeException{
     public NotFoundException(){
         super("La ressource n'existe pas");
     }
-    public NotFoundException(String msg) {
-        super(msg);
-    }
 }
