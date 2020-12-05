@@ -1,9 +1,11 @@
 package com.ulco.pokemon.controller;
 
 import com.ulco.pokemon.dto.PokemonDTO;
+import com.ulco.pokemon.enums.PokemonTypeEnum;
 import com.ulco.pokemon.exception.AlreadyExistException;
 import com.ulco.pokemon.exception.NotFoundException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,10 +26,10 @@ public class PokemonController {
     PokemonController() {
         pokemonList = new ArrayList<>();
 
-        pokemonList.add(new PokemonDTO(1, "salamèche", 3.5, 3.5, FEU));
-        pokemonList.add(new PokemonDTO(2, "carapus", 3.5, 3.5, EAU));
-        pokemonList.add(new PokemonDTO(3, "dany", 3.5, 3.5, PLANTE));
-        pokemonList.add(new PokemonDTO(4, "herbivore", 3.5, 3.5, PLANTE));
+        pokemonList.add(new PokemonDTO(1, "salamèche", 3.5, 3.5, PokemonTypeEnum.FEU));
+        pokemonList.add(new PokemonDTO(2, "carapus", 3.5, 3.5, PokemonTypeEnum.EAU));
+        pokemonList.add(new PokemonDTO(3, "dany", 3.5, 3.5, PokemonTypeEnum.PLANTE));
+        pokemonList.add(new PokemonDTO(4, "herbivore", 3.5, 3.5, PokemonTypeEnum.PLANTE));
     }
 
     @GetMapping
@@ -62,12 +64,6 @@ public class PokemonController {
                     .findFirst()
                     .orElseThrow(NotFoundException::new);
 
-            pokemonList.stream()
-                    .filter(user -> user.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(AlreadyExistException::new);
-
-
             pokemonToUpdate.setId(updatePokemon.getId());
             pokemonToUpdate.setName(updatePokemon.getName());
             pokemonToUpdate.setTaille(updatePokemon.getTaille());
@@ -76,6 +72,7 @@ public class PokemonController {
         return ResponseEntity.noContent().build();
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     public ResponseEntity<Void> deleteAllPokemon() {
         pokemonList.clear();
